@@ -11,6 +11,12 @@ Library    RPA.HTTP
 Library    RPA.PDF
 Library    RPA.Archive
 Library    RPA.Robocorp.Vault
+Library    RPA.Dialogs
+Library    OperatingSystem
+Library    RPA.FileSystem
+Library    RPA.FTP
+Library    RPA.Windows
+Library    String
 
 *** Variables ***
 
@@ -22,7 +28,7 @@ Order robots from RobotSpareBin Industries Inc
             Close the annoying modal
             Fill the form    ${row}
             Preview the robot  
-            Wait Until Keyword Succeeds    4x    500ms     Submit the order
+            Wait Until Keyword Succeeds    6x    500ms     Submit the order
             ${pdfName}=    Store the receipt as a PDF file    ${row}[Order number]
             ${screenshot}=    Take a screenshot of the robot
             Embed the robot screenshot to the receipt PDF file    ${screenshot}    ${pdfName}
@@ -39,7 +45,7 @@ Open the robot order website
 
 Get orders
     ${URLpaths} =     Get Secret    URLpaths
-    Download   ${URLpaths}[ExcelPath]   overwrite=True
+    RPA.HTTP.Download   ${URLpaths}[ExcelPath]   overwrite=True
     @{table}=   Read table from CSV    orders.csv
     RETURN     @{table}
 
@@ -65,6 +71,8 @@ Store the receipt as a PDF file
     [Arguments]    ${orderNo}
     Wait Until Element Is Visible    id:receipt
     ${receipt-details}=    Get Element Attribute    id:receipt    outerHTML
+    OperatingSystem.Create Directory    ${OUTPUT_DIR}/Orders
+
     Html To Pdf    ${receipt-details}    ${OUTPUT_DIR}/Orders/Order-${orderNo}.pdf 
     RETURN    ${OUTPUT_DIR}/Orders/Order-${orderNo}.pdf
 
@@ -82,9 +90,35 @@ Embed the robot screenshot to the receipt PDF file
 Go to order another robot
     Click Button    order-another
 
-Create a ZIP file of the receipts
-    Archive Folder With Zip      ${OUTPUT_DIR}/Orders/     ${OUTPUT_DIR}/Orders/Orders.Zip
+Create a ZIP file of the receipts    
+    ${zipname}=   Zip File Name
+    ${FullZipName}=   Set Variable    ${OUTPUT_DIR}/ZIP/${zipname}.zip
+    ${fileExist}=     Does File Exist    ${FullZipName}
+    
+    OperatingSystem.Create Directory    ${OUTPUT_DIR}/ZIP
+    
+    IF    ${fileExist}
+        Remove File    ${FullZipName}
+    END
+        
+    Archive Folder With Zip      ${OUTPUT_DIR}/Orders/     ${FullZipName}    
 
+Zip File Name
+    Add heading    Please enter the zip file name
+    Add text input     name=FileName    label=Zip File Name     placeholder=Enter name here
+    ${result}=    Run dialog
+    ${res} =      Replace String    ${result.FileName}    [",.,*]    ${EMPTY}
+    ${res} =      Replace String    ${res}    .    ${EMPTY}
+
+    WHILE    "${res}" == "${EMPTY}"    limit=NONE
+        Add heading    Please enter the zip file name
+        Add text input     name=FileName    label=Zip File Name     placeholder=Enter name here
+      ${result}=    Run dialog  
+      ${res} =      Replace String    ${result.FileName}    "    ${EMPTY}
+      ${res} =      Replace String    ${res}    .    ${EMPTY}
+    END
+
+    RETURN    ${res} 
 
 Assert page Contains Error
     Page Should Not Contain Element    class:alert-danger
