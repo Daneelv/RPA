@@ -17,6 +17,7 @@ Library    RPA.FileSystem
 Library    RPA.FTP
 Library    RPA.Windows
 Library    String
+Library    RPA.RobotLogListener
 
 *** Variables ***
 
@@ -50,7 +51,8 @@ Get orders
     RETURN     @{table}
 
 Close the annoying modal
-    Click Element If Visible    //button[contains(.,'OK')]
+    Mute Run On Failure    Click Element If Visible
+    Run Keyword And Ignore Error    Click Element If Visible    //button[contains(.,'OK')]
     Wait Until Element Is not Visible     class:modal-dialog
 
 Fill the form 
