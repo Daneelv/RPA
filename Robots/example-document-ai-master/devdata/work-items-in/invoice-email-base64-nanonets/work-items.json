@@ -1,0 +1,26 @@
+[
+  {
+      "payload": {
+        "email": {
+          "from": {
+            "name": "Cosmin Poieană",
+            "address": "cosmin@robocorp.com"
+          },
+          "to": [
+            {
+              "name": "",
+              "address": "process.robocorp.documentaiwo.*****@mail.eu1.robocloud.eu"
+            }
+          ],
+          "cc": [],
+          "bcc": [],
+          "subject": "PNG invoice with engines: Base64AI, Nanonets",
+          "date": "2022-10-27T16:24:16.000Z",
+          "text": "{\n  \"base64ai\": {\n    \"auth\": {\n      \"vault\": \"document_ai:base64ai\"\n    },\n    \"predict\": {\n      \"model\": \"finance/invoice\"\n    }\n  },\n  \"nanonets\": {\n    \"auth\": {\n      \"vault\": \"document_ai:nanonets\"\n    },\n    \"predict\": {\n      \"model\": \"858e4b37-6679-4552-9481-d5497dfc0b4a\"\n    }\n  }\n}"
+        }
+      },
+      "files": {
+          "invoice.png": "invoice.png"
+      }
+  }
+]

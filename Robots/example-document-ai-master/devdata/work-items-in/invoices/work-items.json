@@ -1,0 +1,44 @@
+[
+  {
+    "payload": {
+      "google": {
+        "auth": {
+          "vault": "document_ai:serviceaccount",
+          "region": "eu"
+        },
+        "predict": {
+          "model": "df1d166771005ff4",
+          "project_id": "complete-agency-347912",
+          "region": "eu"
+        }
+      }
+    },
+    "files": {
+      "invoice.pdf": "parallels.pdf",
+      "invoice.png": "parallels.png"
+    }
+  },
+  {
+    "payload": {
+      "base64ai": {
+        "auth": {
+          "vault": "document_ai:base64ai"
+        },
+        "predict": {
+          "model": "finance/invoice"
+        }
+      },
+      "nanonets": {
+        "auth": {
+          "vault": "document_ai:nanonets"
+        },
+        "predict": {
+          "model": "858e4b37-6679-4552-9481-d5497dfc0b4a"
+        }
+      }
+    },
+    "files": {
+      "invoice.png": "parallels.png"
+    }
+  }
+]

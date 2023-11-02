@@ -18,6 +18,7 @@ Library    RPA.FTP
 Library    RPA.Windows
 Library    String
 Library    RPA.RobotLogListener
+Library    RPA.Email.ImapSmtp
 
 *** Variables ***
 
@@ -42,7 +43,6 @@ Order robots from RobotSpareBin Industries Inc
 Open the robot order website
     ${URLpaths} =     Get Secret    URLpaths
     Open Available Browser     ${URLpaths}[BrowserPath]   
-
 
 Get orders
     ${URLpaths} =     Get Secret    URLpaths
